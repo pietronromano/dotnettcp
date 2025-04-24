@@ -12,9 +12,8 @@ class Program
     {
         // Start the socket listener in a background task
         Task listenerTask = StartListener();
+        Console.ReadLine(); //Needed, or program just exits
 
-        Console.WriteLine("Press ENTER to exit...");
-        Console.ReadLine();
     }
 
     private static async Task StartListener()
@@ -36,15 +35,17 @@ class Program
             listener.Bind(localEndPoint);
             listener.Listen(10);
 
+
             Console.WriteLine($"Waiting for a connection on port {port} ...");
 
             while (true)
             {
+
                 // Start an asynchronous socket to listen for connections
                 Socket handler = await listener.AcceptAsync();
-
+                HandleConnection(handler);
                 // Create a task to handle the connection
-                await Task.Run(() => HandleConnection(handler));
+                //await Task.Run(() => HandleConnectionAsync(handler));
             }
 
             //Console.WriteLine("Shutting Down");
@@ -57,7 +58,50 @@ class Program
         }
     }
 
-    private static async Task HandleConnection(Socket handler)
+    private static void HandleConnection(Socket handler)
+    {
+        // Buffer for incoming data
+        byte[] buffer = new byte[1024];
+        string data = "";
+
+        try
+        {
+            // An incoming connection needs to be processed
+            while (true)
+            {
+                int bytesRec =  handler.Receive(buffer, SocketFlags.None);
+                if (bytesRec <= 0)
+                {
+                    Console.WriteLine("bytesRec <= 0. Breaking");
+                    break;
+                }
+
+                // Convert the byte array to a string
+                data = Encoding.ASCII.GetString(buffer, 0, bytesRec) + Environment.NewLine;
+
+                // Check for end-of-file tag. If it is not there, read more data
+                if (data.IndexOf("<EOM>") > -1)
+                {
+                    Console.WriteLine("<EOM> Found. Breaking");
+                    break;
+                }
+                
+            }
+
+            // Show the data on the console
+            Console.WriteLine(DateTime.UtcNow.ToString() + ": Text received : {0}", data);
+
+            // Echo the data back to the client
+            byte[] msg = Encoding.ASCII.GetBytes(DateTime.UtcNow.ToString() + ": " + data);
+             handler.Send(msg, SocketFlags.None);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.ToString());
+        }
+    }
+
+    private static async Task HandleConnectionAsync(Socket handler)
     {
         // Buffer for incoming data
         byte[] buffer = new byte[1024];
@@ -71,6 +115,7 @@ class Program
                 int bytesRec = await handler.ReceiveAsync(buffer, SocketFlags.None);
                 if (bytesRec <= 0)
                 {
+                    Console.WriteLine("bytesRec <= 0. Breaking");
                     break;
                 }
 
@@ -80,16 +125,17 @@ class Program
                 // Check for end-of-file tag. If it is not there, read more data
                 if (data.IndexOf("<EOM>") > -1)
                 {
+                    Console.WriteLine("<EOM> Found. Breaking");
                     break;
                 }
                 
             }
 
             // Show the data on the console
-            Console.WriteLine("Text received : {0}", data);
+            Console.WriteLine(DateTime.UtcNow.ToString() + ": Text received : {0}", data);
 
             // Echo the data back to the client
-            byte[] msg = Encoding.ASCII.GetBytes(data);
+            byte[] msg = Encoding.ASCII.GetBytes(DateTime.UtcNow.ToString() + ": " + data);
             await handler.SendAsync(msg, SocketFlags.None);
         }
         catch (Exception e)

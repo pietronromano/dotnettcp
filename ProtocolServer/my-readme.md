@@ -1,5 +1,6 @@
-# DATE: 22-April-2025 
-# RESULT: WORKED FINE LOCALLY BUT CONTAINER CRASHED ON AZURE CONTAINER APPS
+# DATE: 23-April-2025 
+# SOURCE: https://github.com/aykutalparslan/high-perfomance-tcp-server
+# RESULT: WORKED FINE, LOCALLY AND ON AZURE CONTAINER APPS
 
 # Debug
 ## IF .SocketException (48): Address already in use: KILL the process
@@ -8,9 +9,9 @@ sudo kill -9 <PID>
 
 
 # Docker Commands
-docker build --platform linux/x86_64 -t tcpsocketserver -f Dockerfile .
+docker build --platform linux/x86_64 -t protocolserver -f Dockerfile .
 
-docker container run  --name tcpsocketserver -it -p 11001:11001 tcpsocketserver
+docker container run  --name protocolserver -it -p 11001:11001 protocolserver
 
 
 
@@ -19,10 +20,11 @@ docker container run  --name tcpsocketserver -it -p 11001:11001 tcpsocketserver
 - Access Keys: enable Admin user, QZwnwTg1KIUKA/GWflC3eNQo5jz2Y5dFmpeJtTO5Ig+ACRBBgq5P
 
 acr=plxccoepnraca
-app=tcpsocketserver
-tag=v3
+app=protocolserver
+tag=v1
 docker tag $app $acr.azurecr.io/$app:$tag
 
 az login --tenant  pluxeegroup.onmicrosoft.com
 az acr login -n $acr
 docker push $acr.azurecr.io/$app:$tag
+az acr repository list -n $acr

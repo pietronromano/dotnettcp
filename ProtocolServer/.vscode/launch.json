@@ -10,7 +10,7 @@
             "type": "coreclr",
             "preLaunchTask": "dotnet: build", //SEE tasks.json
             "request": "launch",
-            "program": "${workspaceFolder}/bin/Debug/net9.0/TcpSocketServer.dll",
+            "program": "${workspaceFolder}/bin/Debug/net9.0/ProtocolServer.dll",
             "args": [],
             "env": {
                 "LISTENER_PORT": "11001"
@@ -20,6 +20,5 @@
             "console": "internalConsole"
     
         }
-
     ]
 }
