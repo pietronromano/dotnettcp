@@ -1,0 +1,21 @@
+# DATE: 22-April-2025 
+
+# Docker Commands
+docker build --platform linux/x86_64 -t tcpsocketclient -f Dockerfile .
+
+docker container run  --name tcpsocketclient -it tcpsocketclient
+
+
+
+# Azure Container Registry
+- Create 
+- Access Keys: enable Admin user, QZwnwTg1KIUKA/GWflC3eNQo5jz2Y5dFmpeJtTO5Ig+ACRBBgq5P
+
+acr=plxccoepnraca
+app=tcpsocketclient
+tag=v1
+docker tag $app $acr.azurecr.io/$app:$tag
+
+az login --tenant  pluxeegroup.onmicrosoft.com
+az acr login -n $acr
+docker push $acr.azurecr.io/$app:$tag
