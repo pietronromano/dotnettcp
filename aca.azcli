@@ -1,0 +1,55 @@
+# dotnettcp
+
+# Container Apps Environment
+- Create with own vnet: SEE https://learn.microsoft.com/en-us/azure/container-apps/vnet-custom?tabs=bash&pivots=azure-portal
+
+# CLI Comands
+    az login --tenant  pluxeegroup.onmicrosoft.com
+    az account set -s plx-ccoe-sbx-glb. [139]
+    
+
+    az extension add --name containerapp --upgrade --allow-preview true
+    az provider register --namespace Microsoft.App
+    az provider register --namespace Microsoft.OperationalInsights
+    az provider register --namespace Microsoft.ContainerService
+    
+     
+    RESOURCE_GROUP="plx-rg-ccoe-pnr-aca" 
+    LOCATION="northeurope" 
+    CONTAINERAPPS_ENVIRONMENT="plx-acaenv-ccoe-pnr-aca"
+    VNET_NAME="plx-vnet-ccoe-pnr-aca-int"
+    SNET_NAME="infrastructure-subnet-int"
+
+    az group create \
+        --name $RESOURCE_GROUP \
+        --location $LOCATION
+
+    az network vnet create \
+        --resource-group $RESOURCE_GROUP \
+        --name $VNET_NAME \
+        --location $LOCATION \
+        --address-prefix 10.0.0.0/16
+        
+    
+    az network vnet subnet create \
+        --resource-group $RESOURCE_GROUP \
+        --vnet-name $VNET_NAME \
+        --name $SNET_NAME \
+        --address-prefixes 10.0.0.0/23
+        
+    az network vnet subnet update \
+        --resource-group $RESOURCE_GROUP \
+        --vnet-name $VNET_NAME \
+        --name $SNET_NAME \
+        --delegations Microsoft.App/environments
+        
+    INFRASTRUCTURE_SUBNET=`az network vnet subnet show --resource-group ${RESOURCE_GROUP} --vnet-name $VNET_NAME --name $SNET_NAME --query "id" -o tsv | tr -d '[:space:]'`
+    echo $INFRASTRUCTURE_SUBNET
+    
+    # internal-only false: allows access from anywhere (instead of just vnet)
+    az containerapp env create \
+        --name $CONTAINERAPPS_ENVIRONMENT \
+        --resource-group $RESOURCE_GROUP \
+        --location "$LOCATION" \
+        --infrastructure-subnet-resource-id $INFRASTRUCTURE_SUBNET \
+        --internal-only false

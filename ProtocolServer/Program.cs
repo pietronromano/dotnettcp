@@ -2,6 +2,7 @@
 using System.IO.Pipelines;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using ProtocolServer.Transport;
 
 var listenSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
@@ -11,11 +12,18 @@ string? port =  Environment.GetEnvironmentVariable("LISTENER_PORT");
 port ??= "11000"; //set to default if null: SEE https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0029-ide0030-ide0270
 IPEndPoint localEndPoint = new IPEndPoint(ipAddress, Int32.Parse(port));
 
-listenSocket.Bind(localEndPoint);
-//listenSocket.Bind(new IPEndPoint(IPAddress.Loopback, 8989));
+try
+{
+    listenSocket.Bind(localEndPoint); //listenSocket.Bind(new IPEndPoint(IPAddress.Loopback, 8989));
+    listenSocket.Listen(128);
+    Console.WriteLine($"Waiting for a connection on port {port} ...");
+}
+catch (System.Exception exc)
+{
+    Console.WriteLine("Error Binding: " + exc.Message + Environment.NewLine + exc.StackTrace);;
+}
 
 
-listenSocket.Listen(128);
 var transportScheduler = new IOQueue();
 var applicationScheduler = PipeScheduler.ThreadPool;
 var senderPool = new SenderPool();
@@ -26,37 +34,70 @@ async Task AcceptConnections()
 {
     while (true)
     {
-        var socket = await listenSocket.AcceptAsync();
-        var connection = new Connection(socket, senderPool,
-            transportScheduler, applicationScheduler, memoryPool);
-        _ = ProcessConnection(connection);
+        try
+        {
+            var socket = await listenSocket.AcceptAsync();
+            var connection = new Connection(socket, senderPool,
+                transportScheduler, applicationScheduler, memoryPool);
+            _ = ProcessConnection(connection, port);
+        }
+        catch (System.Exception exc)
+        {
+            Console.WriteLine("Error Accepting Connection: " + exc.Message + Environment.NewLine + exc.StackTrace);;
+        }
     }
 }
 
-static async Task ProcessConnection(Connection connection)
+static async Task ProcessConnection(Connection connection, string port)
 {
     connection.Start();
     while (true)
     {
-        var result = await connection.Input.ReadAsync();
-        var buff = result.Buffer;
-        if (buff.IsSingleSegment)
+        ReadOnlySequence<byte> buffer;
+        ReadResult result;
+        try
         {
-            await connection.Output.WriteAsync(buff.First);
-        }
-        else
-        {
-            foreach (var mem in buff)
+            result = await connection.Input.ReadAsync();
+            buffer = result.Buffer;
+            byte[] bufferArray = buffer.ToArray();
+            var input = Encoding.UTF8.GetString(bufferArray, 0, bufferArray.Length);
+            Console.WriteLine($"Socket Server received input: \"{input}\"");
+
+            if (buffer.IsSingleSegment)
             {
-                await connection.Output.WriteAsync(mem);
+                await connection.Output.WriteAsync(buffer.First);
+            }
+            else
+            {
+                foreach (var mem in buffer)
+                {
+                    await connection.Output.WriteAsync(mem);
+                }
+            }
+
+            connection.Input.AdvanceTo(buffer.End);
+            if (result.IsCompleted || result.IsCanceled)
+            {
+                break;
             }
         }
-        connection.Input.AdvanceTo(buff.End);
-        if (result.IsCompleted || result.IsCanceled)
+        catch (System.Exception exc)
         {
-            break;
+            Console.WriteLine("Error Reading: " + exc.Message + Environment.NewLine + exc.StackTrace); ;
         }
+
+       
     }
-    connection.Shutdown();
-    await connection.DisposeAsync();
+
+    try
+    {
+        connection.Shutdown();
+        await connection.DisposeAsync();
+        Console.WriteLine($"Shut Down listener on port {port}.");
+    }
+    catch (System.Exception exc)
+    {
+        Console.WriteLine("Error Shutting Down: " + exc.Message + Environment.NewLine + exc.StackTrace); ;
+    }
+    
 }

@@ -9,7 +9,8 @@ docker container run  --name tcpsocketclient -it tcpsocketclient
 
 # Azure Container Registry
 - Create 
-- Access Keys: enable Admin user, QZwnwTg1KIUKA/GWflC3eNQo5jz2Y5dFmpeJtTO5Ig+ACRBBgq5P
+- Access Keys: enable Admin user,
+
 
 acr=plxccoepnraca
 app=tcpsocketclient
