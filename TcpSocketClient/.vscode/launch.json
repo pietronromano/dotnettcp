@@ -11,14 +11,12 @@
             "request": "launch",
             "preLaunchTask": "dotnet: build", //SEE tasks.json
             "program": "${workspaceFolder}/bin/Debug/net9.0/TcpSocketClient.dll",
-            "args": [],
+            "args": ["48.209.145.34","9091", "/Users/macbookpro/dev/dotnet/DotNetTcp/TcpSocketClient/message.txt", "1"],
             "env": {
-                "LISTENER_PORT": "11001", // "11001", //"1002",
-                "LISTENER_IP":   "48.209.145.34" // "4.209.25.172" //"127.0.0.1" "172.17.0.2" 
+                "LISTENER_PORT": "9091", // "11001"
+                "LISTENER_IP":   "48.209.145.34" //"127.0.0.1"  
                 //nslookup plx-ca-ccoe-pnr-tcpserver.politesand-eb338679.northeurope.azurecontainerapps.io
-                //nslookup plx-aca-ccoe-pnr-protocolserver--reyafxh.internal.ambitiousdune-d2f2d3c5.northeurope.azurecontainerapps.io
-                //nslookup plx-aca-ccoe-pnr-tcpsocketserver--os1ixfb.internal.ambitiousdune-d2f2d3c5.northeurope.azurecontainerapps.io" 
-            },
+              },
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console": "internalConsole"
