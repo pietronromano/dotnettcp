@@ -39,16 +39,14 @@ class TcpSocketClient {
         string ip = args[0];
         string port = args[1];
         string message = args[2];
-        
-        int messageCount = 1;
-        if (!Int32.TryParse(args[3], out messageCount))
+
+        if (!Int32.TryParse(args[3], out int messageCount))
         {
             Console.WriteLine(args[3] + " is not an integer. Defaulting to message count of 1");
             messageCount = 1;
         }
-        
-        int timeout = 10000;
-        if (!Int32.TryParse(args[4], out timeout))
+
+        if (!Int32.TryParse(args[4], out int timeout))
         {
             Console.WriteLine(args[4] + " is not an integer. Defaulting to timeout of 10 seconds");
             timeout = 10000;
