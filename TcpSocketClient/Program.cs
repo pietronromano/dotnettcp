@@ -8,7 +8,7 @@ using System.Net.Mail;
 
 class TcpSocketClient {
 
-    static string? LogFile;
+    
     static  StreamWriter? LogWriter;
     static async Task Main(string[] args)
     {
@@ -30,20 +30,46 @@ class TcpSocketClient {
         */
 
         //Check the args 
-        if (args.Length != 4)
+        if (args.Length != 5)
         {
-            WriteLog(args.Length + " Arguments supplied.\nRequired: ip port Message|FilePath/message.txt messageCount");
+            WriteLog(args.Length + " Arguments supplied.\nRequired: ip port Message|FilePath/message.txt messageCount timeout");
             return;
         }
 
         string ip = args[0];
         string port = args[1];
         string message = args[2];
-        if (message.Contains(".txt")) //treat as a file
-            message = File.ReadAllText(message);
-        int messageCount = Int32.Parse(args[3]);
+        
+        int messageCount = 1;
+        if (!Int32.TryParse(args[3], out messageCount))
+        {
+            Console.WriteLine(args[3] + " is not an integer. Defaulting to message count of 1");
+            messageCount = 1;
+        }
+        
+        int timeout = 10;
+        if (!Int32.TryParse(args[4], out timeout))
+        {
+            Console.WriteLine(args[4] + " is not an integer. Defaulting to timeout of 10 seconds");
+            timeout = 1;
+        }
 
+        try
+        {
+            if (message.Contains(".txt")) //treat as a file
+            {
+                string messagePath = Path.Join(Environment.CurrentDirectory, message);
+                message = File.ReadAllText(messagePath);
 
+            }
+
+        }
+        catch (System.Exception exc)
+        {
+            Console.WriteLine("Error reading message file .txt: " + exc.Message);
+            return;
+        }
+           
 
         IPAddress localIpAddress = IPAddress.Parse(ip);
         IPEndPoint ipEndPoint = new(localIpAddress, Int32.Parse(port));
@@ -51,16 +77,26 @@ class TcpSocketClient {
         ipEndPoint.AddressFamily,
         SocketType.Stream,
         ProtocolType.Tcp);
-
+        
         //Logs
-        LogFile = "log_" + ip + "-" + port + "_@" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".txt";
-        LogWriter = File.AppendText(LogFile);
+        string logFile = "log_" + DateTime.Now.ToString("yyyy-MM-ddTHH-mm-ss") + "@" + ip + "-" + port  + ".txt";
+        string logPath = Path.Join(Environment.CurrentDirectory, "logs");
+        if (!Path.Exists(logPath))
+            System.IO.Directory.CreateDirectory(logPath);
+
+        logPath = Path.Join(logPath,logFile);
+        LogWriter = File.AppendText(logPath);
 
         try
         {
-            WriteLog($"ConnectAsync: trying to connect on {ip}:{port}");
-            await client.ConnectAsync(ipEndPoint);
-            WriteLog("ConnectAsync: Connected");
+            WriteLog($"Connect: trying to connect on {ip}:{port}");
+
+            if (!client.ConnectAsync(ipEndPoint).Wait(timeout * 1000))
+            {
+                WriteLog($"Connect timed out after {timeout} seconds");
+                throw new Exception($"Connection timeout");
+            }
+            WriteLog("Connect: Connected");
 
             for (int i = 1; i <= messageCount; i++)
             {
@@ -88,7 +124,7 @@ class TcpSocketClient {
 
     static void WriteLog(string log) 
     {
-        string msg = DateTime.Now.ToString("HH-mm-ss") + ": " + log;
+        string msg = DateTime.Now.ToString("HH:mm:ss") + ": " + log;
         Console.WriteLine(msg);
         if(LogWriter != null)
             LogWriter.WriteLine(msg);

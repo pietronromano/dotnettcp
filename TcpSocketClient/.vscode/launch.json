@@ -14,7 +14,11 @@
             //dev 10.247.35.173 plx-ca-transauth-dev-neu-2.wonderfulflower-6d494ef0.northeurope.azurecontainerapps.io
             //prod 10.247.36.59 plx-ca-transauth-prd-neu-2.mangoisland-cbb12176.northeurope.azurecontainerapps.io
             //uat 10.247.36.165 plx-ca-transauth-uat-neu-2.greenglacier-a5a9cff2.northeurope.azurecontainerapps.io
-            "args": ["10.247.35.173","9091", "C:\\Users\\_pietro.romano\\dotnettcp\\TcpSocketClient\\message.txt", "1"],
+
+            //args:  ip , port, message|message.txt, messageCount, connectTimeout (seconds)
+            "args": ["10.247.35.173","9091", "message.txt", "1", "10"],
+            
+            // Example of using environment variables
             "env": {
                 //"LISTENER_PORT": "9098", //"9096",//"9091","9090", // "11001"
                 //"LISTENER_IP":   "10.247.35.173" //"127.0.0.1"  
