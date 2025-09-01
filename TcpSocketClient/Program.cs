@@ -47,11 +47,11 @@ class TcpSocketClient {
             messageCount = 1;
         }
         
-        int timeout = 10;
+        int timeout = 10000;
         if (!Int32.TryParse(args[4], out timeout))
         {
             Console.WriteLine(args[4] + " is not an integer. Defaulting to timeout of 10 seconds");
-            timeout = 1;
+            timeout = 10000;
         }
 
         try
@@ -91,16 +91,16 @@ class TcpSocketClient {
         {
             WriteLog($"Connect: trying to connect on {ip}:{port}");
 
-            if (!client.ConnectAsync(ipEndPoint).Wait(timeout * 1000))
+            if (!client.ConnectAsync(ipEndPoint).Wait(timeout))
             {
-                WriteLog($"Connect timed out after {timeout} seconds");
+                WriteLog($"Connect timed out after {timeout} milliseconds");
                 throw new Exception($"Connection timeout");
             }
             WriteLog("Connect: Connected");
 
             for (int i = 1; i <= messageCount; i++)
             {
-                await SendMessage(client, message);
+                SendMessage(client, message, timeout);
             }
 
             await client.DisconnectAsync(false);
@@ -131,13 +131,18 @@ class TcpSocketClient {
 
     }
     // Send message
-    static async Task SendMessage(Socket client,string message)
+    static void SendMessage(Socket client,string message, int timeout)
     {
         WriteLog($"Socket client SendMessage: {message}");
         var messageBytes = Encoding.ASCII.GetBytes(message);
 
-        WriteLog("Socket client SendMessage: Starting");
-        _ = await client.SendAsync(messageBytes, SocketFlags.None);
+        WriteLog("Socket client SendAsync: Starting");
+        if(!client.SendAsync(messageBytes, SocketFlags.None).Wait(timeout))
+        {
+            WriteLog($"SendAsync timed out after {timeout} milliseconds");
+            throw new Exception($"SendAsync timeout");
+        }
+
         WriteLog("Socket client SendMessage: Done");
 
         // Receive ack.
@@ -145,8 +150,12 @@ class TcpSocketClient {
         {
             var buffer = new byte[1_024];
             WriteLog("Socket client ReceiveAsync: Starting");
-            var received = await client.ReceiveAsync(buffer, SocketFlags.None);
-            var response = Encoding.ASCII.GetString(buffer, 0, received);
+            if(!client.ReceiveAsync(buffer, SocketFlags.None).Wait(timeout))
+            {
+                WriteLog($"ReceiveAsync timed out after {timeout} milliseconds");
+                throw new Exception($"ReceiveAsync timeout");
+            }
+            var response = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
             WriteLog($"Socket client ReceiveAsync Acknowledgment: \"{response}\"");
 
         }

@@ -1,0 +1,13 @@
+19:04:10: Connect: trying to connect on 10.247.35.173:9091
+19:04:10: Connect: Connected
+19:04:10: Socket client SendMessage: 02 49 47 54 36 32 20 25 08 29 00 17 24 00 00 00 01 00 04 33 79 00 00 31 2E 33 33 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 30 30 30 30 30 30 30 30 03 1A
+19:04:10: Socket client SendAsync: Starting
+19:04:16: Socket client SendMessage: Done
+19:04:16: Socket client ReceiveAsync: Starting
+19:04:17: SendMessage: One or more errors occurred. (An established connection was aborted by the software in your host machine.)
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout)
+   at TcpSocketClient.SendMessage(Socket client, String message, Int32 timeout) in c:\Users\_pietro.romano\dotnettcp\TcpSocketClient\Program.cs:line 153
+19:04:17: Socket client DisconnectAsync
+19:04:17: Socket client SocketShutdown
