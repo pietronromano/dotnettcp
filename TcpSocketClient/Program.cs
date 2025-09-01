@@ -7,6 +7,9 @@ using System.IO;
 using System.Net.Mail;
 
 class TcpSocketClient {
+
+    static string? LogFile;
+    static  StreamWriter? LogWriter;
     static async Task Main(string[] args)
     {
         /* Local & Environment examples
@@ -26,12 +29,14 @@ class TcpSocketClient {
         IPEndPoint ipEndPoint = new(localIpAddress, Int32.Parse(port));
         */
 
+        //Check the args 
         if (args.Length != 4)
         {
-            Console.WriteLine(args.Length + " Arguments supplied.\nRequired: ip port Message|FilePath/message.txt messageCount");
+            WriteLog(args.Length + " Arguments supplied.\nRequired: ip port Message|FilePath/message.txt messageCount");
             return;
         }
-        IPAddress localIpAddress = IPAddress.Parse(args[0]);
+
+        string ip = args[0];
         string port = args[1];
         string message = args[2];
         if (message.Contains(".txt")) //treat as a file
@@ -39,17 +44,23 @@ class TcpSocketClient {
         int messageCount = Int32.Parse(args[3]);
 
 
+
+        IPAddress localIpAddress = IPAddress.Parse(ip);
         IPEndPoint ipEndPoint = new(localIpAddress, Int32.Parse(port));
         using Socket client = new(
         ipEndPoint.AddressFamily,
         SocketType.Stream,
         ProtocolType.Tcp);
 
+        //Logs
+        LogFile = "log_" + ip + "-" + port + "_@" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".txt";
+        LogWriter = File.AppendText(LogFile);
+
         try
         {
-            Console.WriteLine("ConnectAsync: Starting");
+            WriteLog($"ConnectAsync: trying to connect on {ip}:{port}");
             await client.ConnectAsync(ipEndPoint);
-            Console.WriteLine("ConnectAsync: Done");
+            WriteLog("ConnectAsync: Connected");
 
             for (int i = 1; i <= messageCount; i++)
             {
@@ -57,37 +68,55 @@ class TcpSocketClient {
             }
 
             await client.DisconnectAsync(false);
+            WriteLog("Socket client DisconnectAsync");
+
             client.Shutdown(SocketShutdown.Both);
-            Console.WriteLine("Shut Down");
+            WriteLog("Socket client SocketShutdown");
         }
         catch (System.Exception exc)
         {
-            Console.WriteLine(exc.Message + Environment.NewLine + exc.StackTrace);
-            return;
+            WriteLog(exc.Message + Environment.NewLine + exc.StackTrace);
+        }
+        finally
+        {
+            LogWriter.Flush();
+            LogWriter.Close();
+            LogWriter.Dispose();
+
         }
     }
 
+    static void WriteLog(string log) 
+    {
+        string msg = DateTime.Now.ToString("HH-mm-ss") + ": " + log;
+        Console.WriteLine(msg);
+        if(LogWriter != null)
+            LogWriter.WriteLine(msg);
+
+    }
     // Send message
     static async Task SendMessage(Socket client,string message)
     {
-        Console.WriteLine("Socket client SendMessage: Starting");
-        var messageBytes = Encoding.UTF8.GetBytes(message);
+        WriteLog($"Socket client SendMessage: {message}");
+        var messageBytes = Encoding.ASCII.GetBytes(message);
+
+        WriteLog("Socket client SendMessage: Starting");
         _ = await client.SendAsync(messageBytes, SocketFlags.None);
-        Console.WriteLine("Socket client SendMessage: Done");
+        WriteLog("Socket client SendMessage: Done");
 
         // Receive ack.
         try
         {
             var buffer = new byte[1_024];
-            Console.WriteLine("Socket client ReceiveAsync: Starting");
+            WriteLog("Socket client ReceiveAsync: Starting");
             var received = await client.ReceiveAsync(buffer, SocketFlags.None);
-            var response = Encoding.UTF8.GetString(buffer, 0, received);
-            Console.WriteLine($"Socket client ReceiveAsync Acknowledgment: \"{response}\"");
+            var response = Encoding.ASCII.GetString(buffer, 0, received);
+            WriteLog($"Socket client ReceiveAsync Acknowledgment: \"{response}\"");
 
         }
         catch (System.Exception exc)
         {
-            Console.WriteLine("SendMessage: " + exc.Message + Environment.NewLine + exc.StackTrace);
+            WriteLog("SendMessage: " + exc.Message + Environment.NewLine + exc.StackTrace);
             return;
         }   
      }

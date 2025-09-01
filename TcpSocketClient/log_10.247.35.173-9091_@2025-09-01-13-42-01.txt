@@ -1,0 +1,31 @@
+13-42-01: ConnectAsync: trying to connect on 10.247.35.173:9091
+13-42-07: ConnectAsync: Connected
+13-42-34: Socket client SendMessage: 02 49 47 54 36 32 20 25 08 29 00 17 24 00 00 00 01 00 04 33 79 00 00 31 2E 33 33 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 30 30 30 30 30 30 30 30 03 1A
+13-42-51: Socket client SendMessage: Starting
+13-42-54: Socket client SendMessage: Done
+13-43-09: Socket client ReceiveAsync: Starting
+13-43-57: SendMessage: An established connection was aborted by the software in your host machine.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ReceiveAsync(Socket socket, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.ReceiveAsync(Memory`1 buffer, SocketFlags socketFlags, Boolean fromNetworkStream, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.ReceiveAsync(ArraySegment`1 buffer, SocketFlags socketFlags, Boolean fromNetworkStream)
+   at TcpSocketClient.SendMessage(Socket client, String message) in c:\Users\_pietro.romano\dotnettcp\TcpSocketClient\Program.cs:line 112
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at TcpSocketClient.SendMessage(Socket client, String message)
+   at TcpSocketClient.Main(String[] args) in c:\Users\_pietro.romano\dotnettcp\TcpSocketClient\Program.cs:line 67
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.TaskAwaiter.<>c.<OutputWaitEtwEvents>b__12_0(Action innerContinuation, Task innerTask)
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(Action action, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task.TrySetResult()
+   at System.Threading.Tasks.ValueTask.ValueTaskSourceAsTask.<>c.<.cctor>b__4_0(Object state)
+   at System.Net.Sockets.SocketAsyncEventArgs.<>c.<.cctor>b__174_0(UInt32 errorCode, UInt32 numBytes, NativeOverlapped* nativeOverlapped)
+   at System.Threading.PortableThreadPool.IOCompletionPoller.Callback.Invoke(Event e)
+   at System.Threading.ThreadPoolTypedWorkItemQueue`2.System.Threading.IThreadPoolWorkItem.Execute()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+--- End of stack trace from previous location ---
+   at TcpSocketClient.SendMessage(Socket client, String message) in c:\Users\_pietro.romano\dotnettcp\TcpSocketClient\Program.cs:line 112
+13-44-05: Socket client DisconnectAsync
+13-44-05: Socket client SocketShutdown

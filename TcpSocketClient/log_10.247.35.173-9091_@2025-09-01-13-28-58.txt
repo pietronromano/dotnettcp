@@ -1,0 +1,7 @@
+13-28-58: ConnectAsync: trying to connect on 10.247.35.173:9091
+13-29-20: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Threading.Tasks.ValueTask.ValueTaskSourceAsTask.<>c.<.cctor>b__4_0(Object state)
+--- End of stack trace from previous location ---
+   at TcpSocketClient.Main(String[] args) in c:\Users\_pietro.romano\dotnettcp\TcpSocketClient\Program.cs:line 62

@@ -11,12 +11,14 @@
             "request": "launch",
             "preLaunchTask": "dotnet: build", //SEE tasks.json
             "program": "${workspaceFolder}/bin/Debug/net9.0/TcpSocketClient.dll",
-            "args": ["48.209.145.34","9091", "/Users/macbookpro/dev/dotnet/DotNetTcp/TcpSocketClient/message.txt", "1"],
+            //dev 10.247.35.173 plx-ca-transauth-dev-neu-2.wonderfulflower-6d494ef0.northeurope.azurecontainerapps.io
+            //prod 10.247.36.59 plx-ca-transauth-prd-neu-2.mangoisland-cbb12176.northeurope.azurecontainerapps.io
+            //uat 10.247.36.165 plx-ca-transauth-uat-neu-2.greenglacier-a5a9cff2.northeurope.azurecontainerapps.io
+            "args": ["10.247.35.173","9091", "C:\\Users\\_pietro.romano\\dotnettcp\\TcpSocketClient\\message.txt", "1"],
             "env": {
-                "LISTENER_PORT": "9091", // "11001"
-                "LISTENER_IP":   "48.209.145.34" //"127.0.0.1"  
-                //nslookup plx-ca-ccoe-pnr-tcpserver.politesand-eb338679.northeurope.azurecontainerapps.io
-              },
+                //"LISTENER_PORT": "9098", //"9096",//"9091","9090", // "11001"
+                //"LISTENER_IP":   "10.247.35.173" //"127.0.0.1"  
+               },
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console": "internalConsole"
