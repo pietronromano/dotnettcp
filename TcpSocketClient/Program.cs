@@ -12,27 +12,11 @@ class TcpSocketClient {
     static  StreamWriter? LogWriter;
     static async Task Main(string[] args)
     {
-        /* Local & Environment examples
-        var hostName = Dns.GetHostName();
-        //IPHostEntry localhost = await Dns.GetHostEntryAsync(hostName);
-        // This is the IP address of the local machine
-        //IPAddress localIpAddress = IPAddress.Any; //localhost.AddressList[3];
-
-        string? ip = Environment.GetEnvironmentVariable("LISTENER_IP");
-        ip ??= "127.0.0.1"; //set to default if null: SEE https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0029-ide0030-ide0270
-
-        IPAddress localIpAddress = IPAddress.Parse(ip);
-
-        string? port = Environment.GetEnvironmentVariable("LISTENER_PORT");
-        port ??= "11000"; //set to default if null: SEE https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0029-ide0030-ide0270
-
-        IPEndPoint ipEndPoint = new(localIpAddress, Int32.Parse(port));
-        */
 
         //Check the args 
         if (args.Length != 5)
         {
-            WriteLog(args.Length + " Arguments supplied.\nRequired: ip port Message|FilePath/message.txt messageCount timeout");
+            WriteLog(args.Length + " Arguments supplied.\nRequired: ip port Message|FilePath/message.txt messageCount timeout(milliseconds)");
             return;
         }
 
@@ -58,9 +42,12 @@ class TcpSocketClient {
             {
                 string messagePath = Path.Join(Environment.CurrentDirectory, message);
                 message = File.ReadAllText(messagePath);
-
             }
-
+            if (String.IsNullOrEmpty(message)) 
+            {
+                Console.WriteLine("Empt message in args[2] or empty message file. Exiting");
+                return;
+            }
         }
         catch (System.Exception exc)
         {

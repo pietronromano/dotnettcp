@@ -6,9 +6,29 @@ dotnet build --configuration Release
 ## Copy message.txt to folder
 cp message.txt bin/Release/net9.0
 
-## run //args:  ip , port, message|message.txt, messageCount, connectTimeout (milliseconds)
+## run on mac //args:  ip , port, message|message.txt, messageCount, connectTimeout (milliseconds)
 dotnet bin/Release/net9.0/TcpSocketClient.dll "10.247.36.59" "9091" "message.txt" "1" "10000"
 
+## run on windows 
+bin\Release\net9.0\TcpSocketClient.exe "10.247.36.59" "9091" "message.txt" "1" "10000"
+
+
+/* Local & Environment examples
+        var hostName = Dns.GetHostName();
+        //IPHostEntry localhost = await Dns.GetHostEntryAsync(hostName);
+        // This is the IP address of the local machine
+        //IPAddress localIpAddress = IPAddress.Any; //localhost.AddressList[3];
+
+        string? ip = Environment.GetEnvironmentVariable("LISTENER_IP");
+        ip ??= "127.0.0.1"; //set to default if null: SEE https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0029-ide0030-ide0270
+
+        IPAddress localIpAddress = IPAddress.Parse(ip);
+
+        string? port = Environment.GetEnvironmentVariable("LISTENER_PORT");
+        port ??= "11000"; //set to default if null: SEE https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0029-ide0030-ide0270
+
+        IPEndPoint ipEndPoint = new(localIpAddress, Int32.Parse(port));
+*/
 
 
 # Docker Commands

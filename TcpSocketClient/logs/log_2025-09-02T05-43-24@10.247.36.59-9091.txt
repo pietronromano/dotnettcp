@@ -1,0 +1,11 @@
+05:43:24: Connect: trying to connect on 10.247.36.59:9091
+05:43:24: Connect: Connected
+05:43:24: Socket client SendMessage: 02 49 47 54 36 32 20 25 08 29 00 17 24 00 00 00 01 00 04 33 79 00 00 31 2E 33 33 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 30 30 30 30 30 30 30 30 03 1A
+05:43:24: Socket client SendAsync: Starting
+05:43:24: Socket client SendMessage: Done
+05:43:24: Socket client ReceiveAsync: Starting
+05:43:34: ReceiveAsync timed out after 10000 milliseconds
+05:43:34: SendMessage: ReceiveAsync timeout
+   at TcpSocketClient.SendMessage(Socket client, String message, Int32 timeout) in C:\Users\_pietro.romano\dotnettcp\TcpSocketClient\Program.cs:line 154
+05:43:34: Socket client DisconnectAsync
+05:43:34: Socket client SocketShutdown
