@@ -1,0 +1,14 @@
+08:13:11: Connect: trying to connect on 10.247.36.165:9091
+08:13:12: Connect: Connected
+08:13:12: Socket client SendMessage: 02 49 47 54 36 32 20 25 08 29 00 17 24 00 00 00 01 00 04 33 79 00 00 31 2E 33 33 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 30 30 30 30 30 30 30 30 03 1A
+08:13:12: Socket client SendAsync: Starting
+08:13:12: Socket client SendMessage: Done
+08:13:12: Socket client ReceiveAsync: Starting
+08:13:22: ReceiveAsync timed out after 10000 milliseconds
+08:13:22: SendMessage: ReceiveAsync timeout
+   at TcpSocketClient.SendMessage(Socket client, String message, Int32 timeout) in C:\Users\_pietro.romano\dotnettcp\TcpSocketClient\Program.cs:line 141
+08:13:22: Socket client DisconnectAsync
+08:13:22: Socket client SocketShutdown
+
+Azure logs:
+(NONE)

@@ -1,0 +1,73 @@
+08:03:00: Connect: trying to connect on 10.247.36.59:9091
+08:03:00: Connect: Connected
+08:03:00: Socket client SendMessage: 02 49 47 54 36 32 20 25 08 29 00 17 24 00 00 00 01 00 04 33 79 00 00 31 2E 33 33 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 30 30 30 30 30 30 30 30 03 1A
+08:03:00: Socket client SendAsync: Starting
+08:03:00: Socket client SendMessage: Done
+08:03:00: Socket client ReceiveAsync: Starting
+08:03:10: ReceiveAsync timed out after 10000 milliseconds
+08:03:10: SendMessage: ReceiveAsync timeout
+   at TcpSocketClient.SendMessage(Socket client, String message, Int32 timeout) in C:\Users\_pietro.romano\dotnettcp\TcpSocketClient\Program.cs:line 141
+08:03:10: Socket client DisconnectAsync
+08:03:10: Socket client SocketShutdown
+
+Azure logs:
+02/09/2025, 08:05:02
+
+2025/09/02 08:05:02,593 | INFO | it.qsave.btconnector.gtfe.session.socketManager.SocketManagerGT.run():165 | Thread-196 | | | | Socket closed
+02/09/2025, 08:05:02
+
+2025/09/02 08:05:02,593 | INFO | it.qsave.frontend.web.gtfe.core.queue.loadthread.SocketSessionLoader.run():85 | 20250902080452347 | 36040 | | | | GT SOCKET CLOSED
+02/09/2025, 08:05:02
+
+2025/09/02 08:05:02,587 | INFO | stdout.write():71 | Thread-194 | POS - MANAGER CLOSED
+02/09/2025, 08:05:02
+
+2025/09/02 08:05:02,593 | INFO | it.qsave.frontend.web.gtfe.core.queue.loadthread.SocketSessionLoader.run():85 | 20250902080452347 | 36040 | | | | GT SOCKET CLOSED
+02/09/2025, 08:05:02
+
+2025/09/02 08:05:02,593 | INFO | it.qsave.btconnector.gtfe.session.socketManager.SocketManagerGT.run():165 | Thread-196 | | | | Socket closed
+02/09/2025, 08:04:52
+
+2025/09/02 08:04:52,346 | DEBUG | it.qsave.btconnector.gtfe.starter.DriverStarter.getInt():219 | Thread-107 | DriverStarter: 9098
+02/09/2025, 08:04:52
+
+2025/09/02 08:04:52,347 | DEBUG | it.qsave.btconnector.gtfe.starter.DriverStarter.NoSSL():150 | Thread-107 | CONNECT OK --- IP chiamante : /100.100.1.65:60228 port:36040
+02/09/2025, 08:04:52
+
+2025/09/02 08:04:52,347 | INFO | stdout.write():71 | Thread-196 | GT - MANAGER STARTED
+02/09/2025, 08:04:52
+
+2025/09/02 08:04:52,346 | DEBUG | it.qsave.btconnector.gtfe.starter.DriverStarter.getInt():219 | Thread-107 | DriverStarter: 9098
+02/09/2025, 08:04:52
+
+2025/09/02 08:04:52,347 | DEBUG | it.qsave.btconnector.gtfe.starter.DriverStarter.NoSSL():150 | Thread-107 | CONNECT OK --- IP chiamante : /100.100.1.65:60228 port:36040
+02/09/2025, 08:03:16
+
+2025/09/02 08:03:10,515 | INFO | it.qsave.btconnector.gtfe.session.socketManager.SocketManagerGT.run():165 | Thread-190 | | | | Socket closed
+02/09/2025, 08:03:16
+
+2025/09/02 08:03:10,514 | INFO | it.qsave.frontend.web.gtfe.core.queue.loadthread.SocketSessionLoader.run():85 | 20250902080300433 | 36444 | | | | GT SOCKET CLOSED
+02/09/2025, 08:03:16
+
+2025/09/02 08:03:10,514 | INFO | it.qsave.frontend.web.gtfe.core.queue.loadthread.SocketSessionLoader.run():85 | 20250902080300433 | 36444 | | | | GT SOCKET CLOSED
+02/09/2025, 08:03:16
+
+2025/09/02 08:03:10,515 | INFO | it.qsave.btconnector.gtfe.session.socketManager.SocketManagerGT.run():165 | Thread-190 | | | | Socket closed
+02/09/2025, 08:03:16
+
+2025/09/02 08:03:10,506 | INFO | stdout.write():71 | Thread-188 | POS - MANAGER CLOSED
+02/09/2025, 08:03:00
+
+2025/09/02 08:03:00,432 | DEBUG | it.qsave.btconnector.gtfe.starter.DriverStarter.getInt():219 | Thread-107 | DriverStarter: 9098
+02/09/2025, 08:03:00
+
+2025/09/02 08:03:00,432 | DEBUG | it.qsave.btconnector.gtfe.starter.DriverStarter.getInt():219 | Thread-107 | DriverStarter: 9098
+02/09/2025, 08:03:00
+
+2025/09/02 08:03:00,433 | DEBUG | it.qsave.btconnector.gtfe.starter.DriverStarter.NoSSL():150 | Thread-107 | CONNECT OK --- IP chiamante : /100.100.1.65:57200 port:36444
+02/09/2025, 08:03:00
+
+2025/09/02 08:03:00,434 | INFO | stdout.write():71 | Thread-190 | GT - MANAGER STARTED
+02/09/2025, 08:03:00
+
+2025/09/02 08:03:00,433 | DEBUG | it.qsave.btconnector.gtfe.starter.DriverStarter.NoSSL():150 | Thread-107 | CONNECT OK --- IP chiamante : /100.100.1.65:57200 port:36444

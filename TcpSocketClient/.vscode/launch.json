@@ -16,8 +16,8 @@
             //uat 10.247.36.165 plx-ca-transauth-uat-neu-2.greenglacier-a5a9cff2.northeurope.azurecontainerapps.io
 
             //args:  ip , port, message|message.txt, messageCount, connectTimeout (milliseconds)
-            "args": ["10.247.36.59","9091", "message.txt", "1", "10000"],
-            
+            "args": ["10.247.36.165","9091", "message.txt", "1", "10000"],
+             
             // Example of using environment variables
             "env": {
                 //"LISTENER_PORT": "9098", //"9096",//"9091","9090", // "11001"
