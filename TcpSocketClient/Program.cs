@@ -82,7 +82,7 @@ class TcpSocketClient {
                 throw new Exception($"Connection timeout");
             }
             WriteLog("Connect: Connected");
-
+ 
             for (int i = 1; i <= messageCount; i++)
             {
                 SendMessage(client, message, timeout);
