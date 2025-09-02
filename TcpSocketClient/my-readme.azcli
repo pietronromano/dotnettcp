@@ -1,4 +1,15 @@
-# DATE: 22-April-2025 
+# DATE: 02-September 2025, 22-April-2025 
+
+# Build and run on mac
+dotnet build --configuration Release 
+
+## Copy message.txt to folder
+cp message.txt bin/Release/net9.0
+
+## run //args:  ip , port, message|message.txt, messageCount, connectTimeout (milliseconds)
+dotnet bin/Release/net9.0/TcpSocketClient.dll "10.247.36.59" "9091" "message.txt" "1" "10000"
+
+
 
 # Docker Commands
 docker build --platform linux/x86_64 -t tcpsocketclient -f Dockerfile .
